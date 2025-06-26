@@ -46,9 +46,13 @@ public class ChargeRestController {
     }
 
     @PatchMapping("/{id}/soft-delete")
-    public ResponseEntity<Charge> softDeleteCharge(@PathVariable String id) {
-        Charge deletedCharge = chargeService.softDeleteCharge(id);
-        return new ResponseEntity<>(deletedCharge, HttpStatus.OK);
+    public ResponseEntity<?> softDeleteCharge(@PathVariable String id) {
+        try {
+            Charge deletedCharge = chargeService.softDeleteCharge(id);
+            return new ResponseEntity<>(deletedCharge, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("No se pudo desactivar el cargo: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PatchMapping("/{id}/restore")
